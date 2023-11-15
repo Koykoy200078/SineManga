@@ -22,6 +22,7 @@ import { ROUTES } from '../configs'
 import Login from '../screens/Login'
 import Dashboard from '../screens/Dashboard'
 import Anime from '../screens/Anime'
+import Info from '../screens/Info'
 
 const options = {
 	headerShown: false,
@@ -53,6 +54,8 @@ const Main = () => {
 			screenOptions={options}>
 			<MainStack.Screen name={ROUTES.DASHBOARD} component={Dashboard} />
 			<MainStack.Screen name={ROUTES.ANIME} component={Anime} />
+
+			<MainStack.Screen name={ROUTES.INFO} component={Info} />
 		</MainStack.Navigator>
 	)
 }
@@ -61,7 +64,7 @@ export default () => {
 	const [initialized, setInitialized] = useState(true)
 	const [user, setUser] = useState(null)
 
-	console.log(user)
+	// console.log(user)
 	const isDarkMode = useColorScheme() === 'dark'
 
 	const onAuthStateChange = (user) => {
@@ -74,7 +77,7 @@ export default () => {
 
 	useEffect(() => {
 		if (Platform.OS === 'android') {
-			StatusBar.setBackgroundColor(isDarkMode ? 'black' : 'white', true)
+			StatusBar.setBackgroundColor(isDarkMode ? '#071231' : 'white', true)
 		}
 		StatusBar.setBarStyle(isDarkMode ? 'light-content' : 'dark-content', true)
 

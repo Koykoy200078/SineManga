@@ -1,4 +1,8 @@
 {
-  "name": "SineManga",
-  "displayName": "SineManga"
+	"name": "SineManga",
+	"displayName": "SineManga",
+
+	"react-native-google-mobile-ads": {
+		"android_app_id": "ca-app-pub-1474281514036342~9774064030"
+	}
 }
