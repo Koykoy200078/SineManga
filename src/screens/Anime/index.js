@@ -19,12 +19,14 @@ import {
 	resetWatchAnime,
 } from '../../apps/reducers/anime'
 import { RefreshControl } from 'react-native-gesture-handler'
-import { ROUTES } from '../../configs'
+import { IMAGES, ROUTES } from '../../configs'
 import { useFocusEffect } from '@react-navigation/native'
+
+import FastImage from 'react-native-fast-image'
 
 const Anime = ({ navigation, route }) => {
 	const { width, height } = useWindowDimensions()
-	const { isLoading, latest_data, popular_data } = useSelector(
+	const { isLoading, latest_data, popular_data, viewInfo } = useSelector(
 		(state) => state.anime
 	)
 	const { title } = route.params
@@ -57,100 +59,162 @@ const Anime = ({ navigation, route }) => {
 		}
 	}, [isFirstRender, onRefresh])
 
+	useEffect(() => {
+		if (viewInfo) {
+			navigation.navigate(ROUTES.INFO)
+		} else {
+			Alert.alert('Not available')
+		}
+	}, [viewInfo])
+
 	useFocusEffect(
 		useCallback(() => {
 			onRefresh()
 		}, [])
 	)
 
+	// const renderItem = ({ item }) => {
+	// 	return (
+	// 		<View className='flex-1 items-center justify-center'>
+	// 			<TouchableOpacity
+	// 				onPress={() => {
+	// 					dispatch(getAnimeInfo({ id: item.id }))
+	// 					navigation.navigate(ROUTES.INFO)
+	// 				}}>
+	// 				<View
+	// 					style={{
+	// 						flex: 1,
+	// 						alignItems: 'center',
+	// 						justifyContent: 'center',
+	// 						margin: 10,
+	// 					}}>
+	// 					<View className='bg-gray-500 rounded-md overflow-hidden'>
+	// 						<View style={{ height: 180, width: 155, overflow: 'hidden' }}>
+	// 							<FastImage
+	// 								source={{ uri: item ? item.image : IMAGES.DEFAULT_IMAGE }}
+	// 								className='w-full h-[220] rounded-tr-xl rounded-bl-xl'
+	// 								resizeMode={FastImage.resizeMode.cover}
+	// 							/>
+	// 						</View>
+	// 						<View
+	// 							className='flex-1 p-2 items-center justify-center'
+	// 							style={{ width: 155 }}>
+	// 							<View className='items-center justify-center h-[40]'>
+	// 								<Text
+	// 									className='text-center'
+	// 									ellipsizeMode='tail'
+	// 									numberOfLines={2}>
+	// 									{item.title}
+	// 								</Text>
+	// 							</View>
+	// 							<View
+	// 								style={{
+	// 									width: '100%',
+	// 									marginTop: 5,
+	// 								}}>
+	// 								<View className='w-full border border-gray-400 border-dashed mt-[-2]' />
+	// 							</View>
+	// 							{title === 'LATEST RELEASE' && (
+	// 								<Text className='p-1'>Episode {item.episodeNumber}</Text>
+	// 							)}
+
+	// 							{title === 'POPULAR ANIME' && (
+	// 								<View className='flex-row flex-wrap items-center justify-center p-2'>
+	// 									{item.genres.map((genre, index, array) => (
+	// 										<Text key={index} className='p-1'>
+	// 											{genre}
+	// 											{index < array.length - 1 && (
+	// 												<Text className='mx-2'> • </Text>
+	// 											)}
+	// 										</Text>
+	// 									))}
+	// 								</View>
+	// 							)}
+	// 						</View>
+	// 					</View>
+	// 				</View>
+	// 			</TouchableOpacity>
+	// 		</View>
+	// 	)
+	// }
+
 	const renderItem = ({ item }) => {
 		return (
-			<View className='flex-1 items-center justify-center'>
+			<View
+				style={{
+					flex: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+					padding: 10,
+				}}>
 				<TouchableOpacity
-					onPress={() => {
+					onPress={async () => {
 						dispatch(getAnimeInfo({ id: item.id }))
-						navigation.navigate(ROUTES.INFO)
 					}}>
 					<View
-						className='rounded-tr-xl rounded-bl-xl'
+						className='bg-gray-500'
 						style={{
-							height: 440,
-							width: width - 30,
-							margin: 5,
-							backgroundColor: '#fff',
-							shadowColor: '#000',
-							shadowOffset: { width: 0, height: 2 },
-							shadowOpacity: 0.25,
-							shadowRadius: 3.84,
+							borderRadius: 10,
+							overflow: 'hidden',
 							elevation: 5,
+							height: 270,
 						}}>
-						<Image
+						<FastImage
 							source={{
-								uri: item.image,
+								uri: item ? item.image : IMAGES.DEFAULT_IMAGE,
+								priority: FastImage.priority.high,
 							}}
-							className='w-fit h-[350] rounded-tr-xl rounded-bl-xl'
-							resizeMode='cover'
-							resizeMethod='auto'
+							style={{ height: 180, width: 155 }}
+							resizeMode={FastImage.resizeMode.cover}
 						/>
-
-						<View className='my-1 items-center justify-center'>
+						<View style={{ padding: 10 }}>
 							<Text
-								className='text-lg font-bold text-black text-center'
-								style={{ width: width - 40 }}
-								ellipsizeMode='tail'
-								numberOfLines={1}>
+								style={{
+									fontSize: 16,
+									fontWeight: 'bold',
+									textAlign: 'center',
+								}}
+								numberOfLines={2}>
 								{item.title}
 							</Text>
-						</View>
-
-						<View
-							style={{
-								width: '100%',
-								marginTop: 5,
-							}}>
 							<View
 								style={{
-									width: '100%',
-									borderWidth: 1,
-									borderColor: '#E5E5E5',
-									borderStyle: 'dashed',
-									marginTop: -2,
+									height: 1,
+									backgroundColor: '#D1D5DB',
+									marginVertical: 5,
 								}}
 							/>
-						</View>
-
-						{title === 'LATEST RELEASE' && (
-							<View className='flex-row flex-wrap items-center justify-center p-2 h-[50]'>
-								<View className='items-center justify-center'>
-									<Text className='text-base font-bold text-gray-500 mt-1'>
-										Episode {item.episodeNumber}
-									</Text>
+							{title === 'LATEST RELEASE' && (
+								<Text style={{ textAlign: 'center' }}>
+									Episode {item.episodeNumber}
+								</Text>
+							)}
+							{title === 'POPULAR ANIME' && (
+								<View
+									style={{
+										flexDirection: 'row',
+										flexWrap: 'wrap',
+										justifyContent: 'center',
+									}}>
+									{item.genres.map((genre, index, array) => (
+										<Text key={index} style={{ margin: 2 }}>
+											{genre}
+											{index < array.length - 1 && ' • '}
+										</Text>
+									))}
 								</View>
-							</View>
-						)}
-
-						{title === 'POPULAR ANIME' && (
-							<View className='flex-row flex-wrap items-center justify-center p-2'>
-								{item.genres.map((genre, index, array) => (
-									<Text
-										key={index}
-										className='text-sm font-bold text-gray-500 text-center'>
-										{genre}
-										{index < array.length - 1 && (
-											<Text className='mx-2'> • </Text>
-										)}
-									</Text>
-								))}
-							</View>
-						)}
+							)}
+						</View>
 					</View>
 				</TouchableOpacity>
 			</View>
 		)
 	}
+
 	return (
 		<View className='flex-1 dark:bg-[#071231]'>
 			<FlashList
+				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
@@ -162,7 +226,7 @@ const Anime = ({ navigation, route }) => {
 				renderItem={renderItem}
 				estimatedItemSize={160}
 				data={showData && showData.results ? showData.results : []}
-				// numColumns={2}
+				numColumns={2}
 				contentContainerStyle={{
 					padding: 10,
 				}}

@@ -16,6 +16,8 @@ import auth from '@react-native-firebase/auth'
 import { IMAGES, ROUTES } from '../../configs'
 import ADS from '../../ads/config'
 
+const { BannerID } = getEnvVars()
+
 import {
 	BannerAd,
 	BannerAdSize,
@@ -33,6 +35,8 @@ import {
 	resetWatchAnime,
 } from '../../apps/reducers/anime'
 import { useFocusEffect } from '@react-navigation/native'
+import FastImage from 'react-native-fast-image'
+import getEnvVars from '../../../env'
 
 const Dashboard = ({ navigation }) => {
 	const { width, height } = useWindowDimensions()
@@ -170,13 +174,13 @@ const Dashboard = ({ navigation }) => {
 		return (
 			<View className='flex-1 p-2 mt-1 items-center justify-center h-[220]'>
 				<TouchableOpacity onPress={() => null}>
-					<Image
+					<FastImage
 						source={{
 							uri: item ? item.image : IMAGES.DEFAULT_IMAGE,
+							priority: FastImage.priority.high,
 						}}
 						className='w-[160] h-[220] rounded-tr-xl rounded-bl-xl'
-						resizeMode='cover'
-						resizeMethod='scale'
+						resizeMode={FastImage.resizeMode.contain}
 					/>
 				</TouchableOpacity>
 			</View>
@@ -187,13 +191,13 @@ const Dashboard = ({ navigation }) => {
 		return (
 			<View className='flex-1 p-2 mt-1 items-center justify-center h-[220]'>
 				<TouchableOpacity onPress={() => null}>
-					<Image
+					<FastImage
 						source={{
 							uri: item ? item.image : IMAGES.DEFAULT_IMAGE,
+							priority: FastImage.priority.high,
 						}}
 						className='w-[160] h-[220] rounded-tr-xl rounded-bl-xl'
-						resizeMode='cover'
-						resizeMethod='scale'
+						resizeMode={FastImage.resizeMode.contain}
 					/>
 				</TouchableOpacity>
 			</View>
@@ -271,7 +275,7 @@ const Dashboard = ({ navigation }) => {
 			</ScrollView>
 
 			<BannerAd
-				unitId={ADS.BannerID}
+				unitId={BannerID}
 				size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
 				requestOptions={{
 					requestNonPersonalizedAdsOnly: true,

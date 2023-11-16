@@ -50,6 +50,7 @@ export function* viewPopularAnime() {
 
 export function* viewInfoAnime(payload) {
 	const { id } = payload
+
 	try {
 		const options = {
 			method: 'GET',
@@ -65,6 +66,7 @@ export function* viewInfoAnime(payload) {
 		)
 
 		const data = yield response.json()
+		// console.log(JSON.stringify(response, null, 2))
 
 		if (response.ok) {
 			return data

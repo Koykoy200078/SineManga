@@ -1,4 +1,5 @@
 export default {
+	LOGO: require('../assets/img/logo.png'),
 	DEFAULT_IMAGE: require('../assets/img/default_image.png'),
 
 	ANIME: require('../assets/img/anime.png'),
